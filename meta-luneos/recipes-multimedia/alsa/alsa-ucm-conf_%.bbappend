@@ -10,26 +10,32 @@ SRC_URI:append = " \
 "
 SRCREV_msm8953 = "b6860eae577ddea6f55834850fb4ed403f208d2f"
 
+# msm8953 UCM configs not needed for x86 emulator targets
+SRC_URI:remove:qemux86 = "git://github.com/msm8953-mainline/alsa-ucm-conf.git;protocol=https;branch=master;name=msm8953;destsuffix=${BP}/msm8953"
+SRC_URI:remove:qemux86-64 = "git://github.com/msm8953-mainline/alsa-ucm-conf.git;protocol=https;branch=master;name=msm8953;destsuffix=${BP}/msm8953"
+
 do_install:append() {
-    # msm8953: generic codecs
-    install -d ${D}${datadir}/alsa/ucm2/codecs/msm8953-wcd
-    install -m 0644 ${S}/msm8953/ucm2/codecs/msm8953-wcd/*.conf ${D}${datadir}/alsa/ucm2/codecs/msm8953-wcd/
+    if [ -d ${S}/msm8953 ]; then
+        # msm8953: generic codecs
+        install -d ${D}${datadir}/alsa/ucm2/codecs/msm8953-wcd
+        install -m 0644 ${S}/msm8953/ucm2/codecs/msm8953-wcd/*.conf ${D}${datadir}/alsa/ucm2/codecs/msm8953-wcd/
 
-    # mido
-    install -d ${D}${datadir}/alsa/ucm2/Xiaomi/mido
-    install -m 0644 ${S}/msm8953/ucm2/Xiaomi/mido/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/mido/HiFi.conf
-    install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-mido
-    install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-mido/xiaomi-mido.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-mido/xiaomi-mido.conf
+        # mido
+        install -d ${D}${datadir}/alsa/ucm2/Xiaomi/mido
+        install -m 0644 ${S}/msm8953/ucm2/Xiaomi/mido/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/mido/HiFi.conf
+        install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-mido
+        install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-mido/xiaomi-mido.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-mido/xiaomi-mido.conf
 
-    # rosy/vince
-    install -d ${D}${datadir}/alsa/ucm2/Xiaomi/vince
-    install -m 0644 ${S}/msm8953/ucm2/Xiaomi/vince/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/vince/HiFi.conf
-    install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-rosy
-    install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-rosy/xiaomi-rosy.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-rosy/xiaomi-rosy.conf
+        # rosy/vince
+        install -d ${D}${datadir}/alsa/ucm2/Xiaomi/vince
+        install -m 0644 ${S}/msm8953/ucm2/Xiaomi/vince/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/vince/HiFi.conf
+        install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-rosy
+        install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-rosy/xiaomi-rosy.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-rosy/xiaomi-rosy.conf
 
-    # tissot/daisy
-    install -d ${D}${datadir}/alsa/ucm2/Xiaomi/daisy
-    install -m 0644 ${S}/msm8953/ucm2/Xiaomi/daisy/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/daisy/HiFi.conf
-    install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-tissot
-    install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-tissot/xiaomi-tissot.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-tissot/xiaomi-tissot.conf
+        # tissot/daisy
+        install -d ${D}${datadir}/alsa/ucm2/Xiaomi/daisy
+        install -m 0644 ${S}/msm8953/ucm2/Xiaomi/daisy/HiFi.conf ${D}${datadir}/alsa/ucm2/Xiaomi/daisy/HiFi.conf
+        install -d ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-tissot
+        install -m 0644 ${S}/msm8953/ucm2/conf.d/xiaomi-tissot/xiaomi-tissot.conf ${D}${datadir}/alsa/ucm2/conf.d/xiaomi-tissot/xiaomi-tissot.conf
+    fi
 }

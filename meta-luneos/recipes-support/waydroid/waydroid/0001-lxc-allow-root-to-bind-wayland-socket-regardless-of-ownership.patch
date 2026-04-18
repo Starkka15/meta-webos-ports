@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000001 Mon Sep 17 00:00:00 2001
+From: LuneOS Developers <luneos-dev@lists.webos-ports.org>
+Date: Sat, 18 Apr 2026 00:00:00 +0000
+Subject: [PATCH] lxc: allow root to bind Wayland socket regardless of ownership
+
+In LuneOS the surface-manager compositor runs as nobody:compositor and
+creates the Wayland socket owned by that user. Waydroid runs as root.
+The uid ownership check prevents root from binding the socket even though
+root has full filesystem access. Skip the uid check when the calling
+process is root (uid=0).
+
+Upstream-Status: Submitted [https://github.com/waydroid/waydroid/issues]
+Signed-off-by: LuneOS Developers <luneos-dev@lists.webos-ports.org>
+---
+ tools/helpers/lxc.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/helpers/lxc.py b/tools/helpers/lxc.py
+index 6be7b7d..0bf9971 100644
+--- a/tools/helpers/lxc.py
++++ b/tools/helpers/lxc.py
+@@ -184,7 +184,8 @@ def generate_session_lxc_config(args, session):
+             logging.warning("User-provided mount path contains illegal character: " + src)
+             return False
+         if dist is None and (not os.path.exists(src) or
+-                             str(os.stat(src).st_uid) != session["user_id"]):
++                             (os.getuid() != 0 and
++                              str(os.stat(src).st_uid) != session["user_id"])):
+             logging.warning("User-provided mount path is not owned by user: " + src)
+             return False
+         return add_node_entry(nodes, src, dist, mnt_type, options, check=False)
+--
+2.34.1

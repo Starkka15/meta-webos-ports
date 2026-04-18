@@ -11,17 +11,25 @@ SRCREV = "41f309f4c185a2c716723c081274eb56eb9263ff"
 SPV = "1.4.2"
 PV = "${SPV}+git"
 
-RDEPENDS:${PN} += "waydroid-data lxc python3-gbinder python3-pygobject libgbinder python3-pyclip"
+RDEPENDS:${PN} += "waydroid-data lxc python3-gbinder python3-pygobject python3-dbus libgbinder python3-pyclip"
 
 # these modules are directly included in android-flavored kernels
 # Note: Waydroid requires kernel >= 3.18 !
 RRECOMMENDS:${PN} += " \
     kernel-module-ashmem-linux \
     kernel-module-binder-linux \
+    kernel-module-nf-conntrack \
+    kernel-module-nf-nat \
+    kernel-module-iptable-mangle \
+    kernel-module-xt-masquerade \
+    kernel-module-xt-checksum \
+    kernel-module-xt-tcpudp \
+    kernel-module-xt-conntrack \
 "
 
 SRC_URI = "git://github.com/herrie82/waydroid.git;branch=herrie/luneos;protocol=https \
     file://gbinder.conf \
+    file://0001-lxc-allow-root-to-bind-wayland-socket-regardless-of-ownership.patch \
 "
 S = "${WORKDIR}/git"
 
