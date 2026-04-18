@@ -8,3 +8,11 @@ SRC_URI += "file://squashfs.cfg \
 
 # we have our own version of virtio.cfg
 KERNEL_FEATURES:remove:qemuall = "cfg/virtio.scc"
+
+# genericx86-64: real-hardware BSP + extra driver coverage
+# Extend COMPATIBLE_MACHINE regex to include our new machine
+COMPATIBLE_MACHINE:append = "|genericx86-64"
+KMACHINE:genericx86-64 = "genericx8664"
+KBRANCH:genericx86-64 = "v6.6/standard/base"
+
+SRC_URI:append:genericx86-64 = " file://genericx86-64-extra.cfg"
