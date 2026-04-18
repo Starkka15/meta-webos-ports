@@ -95,10 +95,6 @@ KERNEL_MODULE_PROBECONF:append:qemux86-64 = " vboxvideo"
 module_conf_vboxvideo:qemux86 = "blacklist vboxvideo"
 module_conf_vboxvideo:qemux86-64 = "blacklist vboxvideo"
 
-# genericx86-64: real hardware, no QEMU guest modules, give rootfs more room
-IMAGE_ROOTFS_EXTRA_SPACE:genericx86-64 = "2097152"
-IMAGE_FSTYPES:genericx86-64 = "tar.gz wic live"
-
 USER_CLASSES ?= ""
 
 # Configure Bluetooth service classes we want to support
