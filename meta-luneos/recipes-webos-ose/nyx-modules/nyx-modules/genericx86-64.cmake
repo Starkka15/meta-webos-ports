@@ -28,8 +28,9 @@ set(NYXMOD_OW_CHARGER               TRUE)
 set(NYXMOD_OW_TOUCHPANEL            FALSE)
 set(NYXMOD_OW_TOUCHPANEL_MTDEV      TRUE)
 set(NYXMOD_OW_KEYS                  TRUE)
-# DISPLAY module: provides display metrics (resolution/DPI) via /dev/fb0
-set(NYXMOD_OW_DISPLAY               TRUE)
+# DISPLAY module: disabled — fails on DRM-only systems with no /dev/fb0
+# (display.c opens /dev/fb0 which doesn't exist under KMS/DRM without fbdev emulation)
+set(NYXMOD_OW_DISPLAY               FALSE)
 
 set(DEVICEINFO_PRODUCT_NAME         "Generic x86-64")
 
