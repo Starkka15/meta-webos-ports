@@ -21,11 +21,15 @@
 # No QEMU virtual hardware — use Linux kernel interfaces instead
 
 set(NYXMOD_OW_QEMU                  FALSE)
-set(NYXMOD_OW_BATTERY               FALSE)
-set(NYXMOD_OW_CHARGER               FALSE)
+# Battery and charger auto-detect via /sys/class/power_supply/*/type scan —
+# no hardcoded path needed; works on any ACPI laptop (BAT0, BAT1, CMB0, etc.)
+set(NYXMOD_OW_BATTERY               TRUE)
+set(NYXMOD_OW_CHARGER               TRUE)
 set(NYXMOD_OW_TOUCHPANEL            FALSE)
 set(NYXMOD_OW_TOUCHPANEL_MTDEV      TRUE)
 set(NYXMOD_OW_KEYS                  TRUE)
+# DISPLAY module: provides display metrics (resolution/DPI) via /dev/fb0
+set(NYXMOD_OW_DISPLAY               TRUE)
 
 set(DEVICEINFO_PRODUCT_NAME         "Generic x86-64")
 
