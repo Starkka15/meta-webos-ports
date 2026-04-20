@@ -34,6 +34,7 @@ PACKAGECONFIG_GRAPHICS = "gles2 eglfs \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland', d)} \
 "
 PACKAGECONFIG_GRAPHICS:append:qemuall = " kms gbm"
+PACKAGECONFIG_GRAPHICS:append:genericx86-64 = " kms gbm"
 PACKAGECONFIG_GRAPHICS:append:hammerhead = " kms gbm"
 PACKAGECONFIG_GRAPHICS:append:pinephone = " kms gbm"
 PACKAGECONFIG_GRAPHICS:append:pinephonepro = " kms gbm"
@@ -84,7 +85,6 @@ PACKAGECONFIG:append = " system-sqlite"
 PACKAGECONFIG[system-pcre2] = "-DFEATURE_system_pcre2=ON,-DFEATURE_system_pcre2=OFF"
 PACKAGECONFIG:remove = "system-pcre2"
 
-PACKAGECONFIG:remove = "libinput"
 
 # Depending on whether LTTNG support is enabled or not for the build we need to
 # depend on the LTTNG providers to not let the build fail

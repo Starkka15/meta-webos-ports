@@ -10,9 +10,10 @@ SRC_URI:append = " \
 "
 SRCREV_msm8953 = "b6860eae577ddea6f55834850fb4ed403f208d2f"
 
-# msm8953 UCM configs not needed for x86 emulator targets
+# msm8953 UCM configs not needed for x86 targets
 SRC_URI:remove:qemux86 = "git://github.com/msm8953-mainline/alsa-ucm-conf.git;protocol=https;branch=master;name=msm8953;destsuffix=${BP}/msm8953"
 SRC_URI:remove:qemux86-64 = "git://github.com/msm8953-mainline/alsa-ucm-conf.git;protocol=https;branch=master;name=msm8953;destsuffix=${BP}/msm8953"
+SRC_URI:remove:genericx86-64 = "git://github.com/msm8953-mainline/alsa-ucm-conf.git;protocol=https;branch=master;name=msm8953;destsuffix=${BP}/msm8953"
 
 do_install:append() {
     if [ -d ${S}/msm8953 ]; then

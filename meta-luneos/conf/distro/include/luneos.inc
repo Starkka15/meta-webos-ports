@@ -95,6 +95,10 @@ KERNEL_MODULE_PROBECONF:append:qemux86-64 = " vboxvideo"
 module_conf_vboxvideo:qemux86 = "blacklist vboxvideo"
 module_conf_vboxvideo:qemux86-64 = "blacklist vboxvideo"
 
+# genericx86-64: zero extra space at machine level to avoid bloating initramfs.
+# The live image recipe sets its own extra space via IMAGE_ROOTFS_EXTRA_SPACE.
+IMAGE_ROOTFS_EXTRA_SPACE:pn-core-image-minimal-initramfs:genericx86-64 = "0"
+
 USER_CLASSES ?= ""
 
 # Configure Bluetooth service classes we want to support

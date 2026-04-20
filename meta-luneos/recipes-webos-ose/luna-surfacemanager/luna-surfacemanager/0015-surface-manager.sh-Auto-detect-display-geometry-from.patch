@@ -1,0 +1,44 @@
+From: LuneOS Developers <luneos@webos-ports.org>
+Date: Sat, 19 Apr 2026 00:00:00 +0000
+Subject: [PATCH] surface-manager.sh.in: Auto-detect display geometry from DRM
+ connectors when config service is unavailable
+
+On real x86-64 hardware (genericx86-64), com.webos.service.config may not
+be running when surface-manager starts.  The existing fallback hardcodes
+"1920x1080+0+0r0s1" which is wrong for any machine that does not have a
+1920x1080 panel — the KMS mode-set will fail and the compositor crashes.
+
+Replace the hardcoded fallback with a shell function that reads the first
+mode reported by the first connected DRM connector from sysfs.  This
+gives the correct native resolution on any hardware without requiring the
+config service.
+
+Upstream-Status: Pending
+---
+ base/startup/surface-manager.sh.in | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/base/startup/surface-manager.sh.in b/base/startup/surface-manager.sh.in
+index 1111111..2222222 100755
+--- a/base/startup/surface-manager.sh.in
++++ b/base/startup/surface-manager.sh.in
+@@ -37,7 +37,18 @@ export WEBOS_COMPOSITOR_DISPLAY_CONFIG=${WEBOS_COMPOSITOR_DISPLAY_CONFIG:-}
+ export WEBOS_COMPOSITOR_EXTRA_OPTIONS=${WEBOS_COMPOSITOR_EXTRA_OPTIONS:-}
+
+ # Compositor geometry
+-export WEBOS_COMPOSITOR_GEOMETRY=$(luna-send -n 1 -a com.webos.surfacemanager luna://com.webos.service.config/getConfigs '{"configNames":["com.webos.surfacemanager.compositorGeometry"]}' | grep -oE "[0-9]+x[0-9]+[\+\-][0-9]+[\+\-][0-9]+r[0-9]+s[0-9]+\.?[0-9]*" || echo "1920x1080+0+0r0s1")
++# Fallback: read native resolution from the first connected DRM connector so
++# that the KMS mode-set uses the panel's actual resolution instead of the
++# hardcoded 1920x1080 default (which is wrong on most laptops and small PCs).
++_detect_drm_geometry() {
++    for _conn in /sys/class/drm/card*-*; do
++        [ "$(cat "$_conn/status" 2>/dev/null)" = "connected" ] || continue
++        _mode=$(awk 'NR==1{print; exit}' "$_conn/modes" 2>/dev/null)
++        [ -n "$_mode" ] && echo "${_mode}+0+0r0s1" && return 0
++    done
++    echo "1920x1080+0+0r0s1"
++}
++export WEBOS_COMPOSITOR_GEOMETRY=$(luna-send -n 1 -a com.webos.surfacemanager luna://com.webos.service.config/getConfigs '{"configNames":["com.webos.surfacemanager.compositorGeometry"]}' | grep -oE "[0-9]+x[0-9]+[\+\-][0-9]+[\+\-][0-9]+r[0-9]+s[0-9]+\.?[0-9]*" || _detect_drm_geometry)
+
+ # Import product specific environment variables
+ PRODUCT_ENVIRONMENT=@WEBOS_INSTALL_SYSCONFDIR@/surface-manager.d/product.env

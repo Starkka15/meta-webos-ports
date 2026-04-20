@@ -1,0 +1,29 @@
+From: LuneOS Developers <luneos@webos-ports.org>
+Date: Sat, 19 Apr 2026 00:00:00 +0000
+Subject: [PATCH] libconnman-qt.pro: Disable hidden symbol visibility for Qt6
+
+Qt6 applies -fvisibility=hidden to library builds, causing SessionAgent
+and other class methods to be hidden from the dynamic symbol table.
+libConnmanQtDeclarative.so (the QML plugin) depends on these symbols;
+loading it fails at runtime with "undefined symbol: _ZN12SessionAgentD1Ev".
+
+Add CONFIG -= hide_symbols to ensure all symbols are exported, matching
+Qt5 behaviour.
+
+Upstream-Status: Pending
+---
+ libconnman-qt/libconnman-qt.pro | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libconnman-qt/libconnman-qt.pro b/libconnman-qt/libconnman-qt.pro
+index 1111111..2222222 100644
+--- a/libconnman-qt/libconnman-qt.pro
++++ b/libconnman-qt/libconnman-qt.pro
+@@ -2,6 +2,7 @@
+ QT          += core dbus network
+ QT          -= gui
+ CONFIG      += qt create_pc create_prl link_pkgconfig
++CONFIG      -= hide_symbols
+
+ isEmpty(VERSION) {
+     VERSION = 1.2.35

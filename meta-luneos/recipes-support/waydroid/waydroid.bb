@@ -39,6 +39,7 @@ S = "${WORKDIR}/git"
 # for following 4 archs (x86-64, armv7a, armv7ve, aarch64)
 COMPATIBLE_MACHINE ?= "(^$)"
 COMPATIBLE_MACHINE:qemux86-64 = "(.*)"
+COMPATIBLE_MACHINE:genericx86-64 = "(.*)"
 COMPATIBLE_MACHINE:rpi = "(.*)"
 COMPATIBLE_MACHINE:pinephone = "(.*)"
 COMPATIBLE_MACHINE:pinephonepro = "(.*)"

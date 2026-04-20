@@ -1,0 +1,28 @@
+From: LuneOS Developers <luneos@webos-ports.org>
+Date: Sat, 19 Apr 2026 00:00:00 +0000
+Subject: [PATCH] shell.pro: Disable hidden symbol visibility for Qt6 plugin
+
+Qt6 automatically applies -fvisibility=hidden when CONFIG += plugin is
+set.  This hides DeviceKeyHandler::eventFilter (a virtual QObject
+override), causing a runtime undefined-symbol error when CardShell.qml
+loads liblunanext-shell-qml.so.
+
+Add CONFIG -= hide_symbols after the plugin CONFIG line so that all
+symbols remain visible, matching Qt5 behaviour.
+
+Upstream-Status: Pending
+---
+ modules/LunaNext/Shell/shell.pro | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/modules/LunaNext/Shell/shell.pro b/modules/LunaNext/Shell/shell.pro
+index 1111111..2222222 100644
+--- a/modules/LunaNext/Shell/shell.pro
++++ b/modules/LunaNext/Shell/shell.pro
+@@ -4,5 +4,6 @@
+ QT += qml quick quick-private
+ CONFIG += qt plugin
++CONFIG -= hide_symbols
+
+ CONFIG += link_pkgconfig
+ PKGCONFIG += luna-service2 luna-service2++ LunaSysMgrCommon

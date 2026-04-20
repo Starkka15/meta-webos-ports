@@ -1,0 +1,26 @@
+From: LuneOS Developers <luneos@webos-ports.org>
+Date: Sat, 19 Apr 2026 00:00:00 +0000
+Subject: [PATCH] libqofono.pro: Skip test subdirs when CONFIG+=no_tests
+
+Test binaries fail to link with Qt6 due to missing QTEST_MAIN expansion.
+Tests are not needed in the image; gate them on no_tests CONFIG flag.
+
+Upstream-Status: Pending
+---
+ libqofono.pro | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libqofono.pro b/libqofono.pro
+index 1111111..2222222 100644
+--- a/libqofono.pro
++++ b/libqofono.pro
+@@ -1,5 +1,8 @@
+ TEMPLATE = subdirs
+-SUBDIRS += src plugin test ofonotest
++SUBDIRS += src plugin
++!no_tests {
++    SUBDIRS += test ofonotest
++}
+ OTHER_FILES += \
+   rpm/libqofono-qt5.spec \
+   TODO \

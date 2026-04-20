@@ -1,0 +1,12 @@
+# LuneOS genericx86-64 disk image
+# GPT layout with EFI system partition + ext4 rootfs + swap
+# Bootloader: grub-efi
+# Compatible with UEFI firmware (2.0+)
+
+part /boot --source bootimg-efi --sourceparams="loader=grub-efi" --ondisk sda --fstype=vfat --label EFI --active --align 1024 --fixed-size 256M --use-uuid
+
+part / --source rootfs --ondisk sda --fstype=ext4 --label luneos-root --align 1024 --use-uuid
+
+part swap --ondisk sda --size 512 --label swap --fstype=swap --use-uuid
+
+bootloader --ptable gpt --timeout=5 --append="rootwait console=tty0"
