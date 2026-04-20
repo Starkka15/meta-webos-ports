@@ -23,6 +23,29 @@ IMAGE_ROOTFS_EXTRA_SPACE = "2097152"
 # bloating core-image-minimal-initramfs beyond its 128MB limit.
 IMAGE_INSTALL:append = " linux-firmware intel-microcode kernel-modules"
 
+# Explicit WiFi/BT firmware sub-packages — Yocto splits linux-firmware into
+# per-device packages; the base package alone misses popular chips.
+# iwlwifi-misc covers AX200/AX201/AX210 (Tiger Lake / Ice Lake / Alder Lake)
+# ibt-misc covers matching Intel Bluetooth
+IMAGE_INSTALL:append = " \
+    linux-firmware-iwlwifi \
+    linux-firmware-iwlwifi-misc \
+    linux-firmware-iwlwifi-8265 \
+    linux-firmware-iwlwifi-9260 \
+    linux-firmware-ath10k \
+    linux-firmware-ath11k \
+    linux-firmware-ath3k \
+    linux-firmware-brcmfmac \
+    linux-firmware-rtl8821 \
+    linux-firmware-rtl8822 \
+    linux-firmware-rtl-nic \
+    linux-firmware-ibt \
+    linux-firmware-ibt-misc \
+"
+
+# rfkill to unblock WiFi/BT soft-block present on most x86 hardware at boot
+IMAGE_INSTALL:append = " rfkill"
+
 # During build the pulse-access group is not available to wam
 inherit extrausers
 EXTRA_USERS_PARAMS = " \
