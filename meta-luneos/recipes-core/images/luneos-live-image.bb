@@ -35,7 +35,10 @@ IMAGE_INSTALL:append = " \
     linux-firmware-ath10k \
     linux-firmware-ath11k \
     linux-firmware-ath3k \
-    linux-firmware-brcmfmac \
+    linux-firmware-bcm43455 \
+    linux-firmware-bcm4356-pcie \
+    linux-firmware-bcm43602 \
+    linux-firmware-bcm4350c2 \
     linux-firmware-rtl8821 \
     linux-firmware-rtl8822 \
     linux-firmware-rtl-nic \
